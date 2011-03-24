@@ -3,8 +3,61 @@
   <title></title>
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery-parallax.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      console.debug('ready');
+
+      $('.parallax').parallax();
+
+      $('.parallax').parallax('scrollTo', $('.page1'), 'left');
+
+
+      $('a.scrollTo').click(function(e) {
+        console.debug('scroll');
+        $('.parallax').parallax('scrollTo', $('.' + $(this).attr('rel')), 'left');
+
+
+        e.preventDefault();
+      });
+    });
+
+  </script>
+  <style>
+  
+  .parallax {
+    border:1px #000 solid;
+    width:512px;
+    height:128px;
+  }
+
+  .parallax .background {
+    background: #00F000;
+    width:100%;
+    height:100%;
+  }
+
+  .page1 {
+    background: #F00000;
+    width:256px;
+    height:100px;
+  }
+
+  .page2 {
+    background: #0000F0;
+    width:256px;
+    height:100px;
+  }
+
+
+  </style>
 </head>
 <body>
-  <div id="parallax"></div>
+  <div class="parallax"></div>
+  <div class="parallax"></div>
+
+  <div class="page1">Page one content</div>
+  <div class="page2">Page two content</div>
+
+  <a href="#" class="scrollTo" rel="page2">Scroll to page 2</div>
 </body>
 </html>
