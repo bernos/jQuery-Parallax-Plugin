@@ -34,18 +34,11 @@
          $this.data('parallax', {settings:settings});
         }
 
-        $(this).append('<div class="background" style="position:absolute;top:0;left:0;z-index:1;"><img class="clear" src="' + settings.background + '"/><img class="blur" src="img/bg-blur.jpg"/></div><div class="foreground" style="position:absolute;top:0;left:0;z-index:2;"></div>');
+        $(this).append('<div class="background" style="position:absolute;top:0;left:0;z-index:1;"><img src="' + settings.background + '"/></div><div class="foreground" style="position:absolute;top:0;left:0;z-index:2;"></div>');
 
         $('.background', $(this)).css({
           'position' : 'relative'
         });
-
-        $('.background .blur', $(this)).css({
-          'position' : 'absolute',
-          'top' : 0,
-          'left' : 0
-        }).hide();
-
       });
     },
 
@@ -90,14 +83,9 @@
         $el.removeClass('parallax-next').addClass('parallax-current').show();
       });
 
-
-       //$('.blur', $bg).show();
-
       $bg.animate({
         'left' : btx
-      }, t, settings.easing, function() {
-        $('.blur', $bg).hide();
-      });
+      }, t, settings.easing);
 
       return this;
     }
