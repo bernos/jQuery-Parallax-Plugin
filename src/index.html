@@ -1,22 +1,24 @@
 <html>
 <head>
   <title></title>
-  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/jquery.easing.js"></script>
   <script type="text/javascript" src="js/jquery-parallax.js"></script>
   <script type="text/javascript">
     $(function(){
       console.debug('ready');
 
-      $('.parallax').parallax();
+      $('#parallax').parallax({
+        background: "img/bg.jpg",
+        factor: 0.07,
+        time: 500,
+        easing: 'easeInOutCubic'
+      });
 
-      $('.parallax').parallax('scrollTo', $('.page1'), 'left');
+      $('a.showElement').click(function(e) {
+        var tokens = $(this).attr('rel').split(':');
 
-
-      $('a.scrollTo').click(function(e) {
-        console.debug('scroll');
-        $('.parallax').parallax('scrollTo', $('.' + $(this).attr('rel')), 'left');
-
-
+        $('#parallax').parallax('showElement', $(tokens[0]), tokens[1]);
         e.preventDefault();
       });
     });
@@ -24,40 +26,48 @@
   </script>
   <style>
   
-  .parallax {
+  #parallax {
     border:1px #000 solid;
-    width:512px;
-    height:128px;
+    width:767px;
+    height:286px;
   }
 
-  .parallax .background {
+  #parallax .background {
     background: #00F000;
     width:100%;
     height:100%;
   }
 
-  .page1 {
-    background: #F00000;
-    width:256px;
-    height:100px;
+  .pages {
+    display:none;
   }
 
-  .page2 {
-    background: #0000F0;
-    width:256px;
-    height:100px;
+  .page {
+    color:#FFFFFF;
+    font-size:16pt;
+    padding:30px;
   }
-
 
   </style>
 </head>
 <body>
-  <div class="parallax"></div>
-  <div class="parallax"></div>
+  <div id="parallax"></div>
 
-  <div class="page1">Page one content</div>
-  <div class="page2">Page two content</div>
+  <div class="pages">
+    <div id="page1" class="page">Page one content</div>
+    <div id="page2" class="page">Page two content</div>
+    <div id="page3" class="page">Page three content</div>
+    <div id="page4" class="page">Page four content</div>
+  </div>
 
-  <a href="#" class="scrollTo" rel="page2">Scroll to page 2</div>
+  <a href="#" class="showElement" rel="#page1:left">Scroll to page 1 left</div><br/>
+  <a href="#" class="showElement" rel="#page2:left">Scroll to page 2 left</div><br/>
+  <a href="#" class="showElement" rel="#page3:left">Scroll to page 3 left</div><br/>
+  <a href="#" class="showElement" rel="#page4:left">Scroll to page 4 left</div><br/>
+  <a href="#" class="showElement" rel="#page1:right">Scroll to page 1 right</div><br/>
+  <a href="#" class="showElement" rel="#page2:right">Scroll to page 2 right</div><br/>
+  <a href="#" class="showElement" rel="#page3:right">Scroll to page 3 right</div><br/>
+  <a href="#" class="showElement" rel="#page4:right">Scroll to page 4 right</div><br/>
+
 </body>
 </html>

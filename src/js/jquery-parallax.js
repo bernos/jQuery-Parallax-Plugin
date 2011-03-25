@@ -1,41 +1,105 @@
 (function($){
   
+  var settings = {
+    factor: 0.25,
+    time:   500,
+    easing: 'swing',
+  }; 
+
   var methods = {
     init: function(options) {
       
-      var settings = {
+      $.extend(settings, {
         width:  this.width(),
         height: this.height()
-      };
+      });
 
       return this.each(function(){
         if (options) {
           $.extend(settings, options);  
         }
 
-        $(this).css('position', 'relative');
+        var $this = $(this);
+        var data  = $this.data('parallax');
+
+        $(this).css({
+          'position' : 'relative',
+          'overflow' : 'hidden'
+        });
+
         $(this).width(settings.width);
         $(this).height(settings.height);
 
-        $(this).append('<div class="background" style="position:absolute;top:0;left:0;z-index:1;"></div><div class="foreground" style="position:absolute;top:0;left:0;z-index:2;"></div>');
+        if (!data) {
+         $this.data('parallax', {settings:settings});
+        }
+
+        $(this).append('<div class="background" style="position:absolute;top:0;left:0;z-index:1;"><img class="clear" src="' + settings.background + '"/><img class="blur" src="img/bg-blur.jpg"/></div><div class="foreground" style="position:absolute;top:0;left:0;z-index:2;"></div>');
+
+        $('.background', $(this)).css({
+          'position' : 'relative'
+        });
+
+        $('.background .blur', $(this)).css({
+          'position' : 'absolute',
+          'top' : 0,
+          'left' : 0
+        }).hide();
+
       });
     },
 
-    scrollTo: function($el, direction) {
-
-
-      $('.foreground', this).append($el.css({
-        'top': '0px',
-        'left' : (this.width() - $('.foreground', this).position().left) + 'px',
-        'position' : 'absolute'
-      }));
-
-      if (direction == 'left') {
-        $fg = $('.foreground', this);
-
-        console.debug('move from ' + $fg.position());
-        $fg.animate({left:$fg.position().left - this.width()})
+    showElement: function($el, direction) {
+      var $fg = $('.foreground', this); // Foreground element
+      var $bg = $('.background', this); // Background image
+      var ox  = $fg.position().left;    // Current foreground offset relative to container
+      var px  = 0;                      // x pos to attach the element at
+      var tx  = 0;                      // x pos to animate the foreground container to
+      var btx = 0;                      // x pos to animate the bg container to
+      var t   = settings.time;          // animation time
+   
+      // in from the right...
+      if (direction == 'right') {
+        px = -ox - settings.width;
+        tx = ox + settings.width;
+        btx = $bg.position().left + (settings.factor * settings.width);
+      } else {
+      // in from the left...
+        px = settings.width - ox;
+        tx = ox - settings.width;
+        btx = $bg.position().left - (settings.factor * settings.width);
       }
+
+      console.debug('ox = ' + ox);
+      console.debug('px = ' + px);
+      console.debug('tween to' + tx);
+
+      $el.addClass('parallax-next');
+      $el.show();
+
+
+
+      $fg.append($el.css({
+        'top'       : 0,
+        'left'      : px + 'px',
+        'position'  : 'absolute'
+      })).animate({
+        'left'      : tx
+      }, t, settings.easing, function() {
+        $('.parallax-current', $fg).removeClass('parallax-current').hide();
+        $el.removeClass('parallax-next').addClass('parallax-current').show();
+      });
+
+
+       //$('.blur', $bg).show();
+
+      $bg.animate({
+        'left' : btx
+      }, t, settings.easing, function() {
+        $('.blur', $bg).hide();
+      });
+
+      return this;
     }
   };
   
