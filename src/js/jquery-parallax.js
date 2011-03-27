@@ -34,7 +34,7 @@
          $this.data('parallax', {settings:settings});
         }
 
-        $(this).append('<div class="background" style="position:absolute;top:0;left:0;z-index:1;"><img src="' + settings.background + '"/></div><div class="foreground" style="position:absolute;top:0;left:0;z-index:2;"></div>');
+        $(this).append('<div class="buffer" style="display:none;"></div><div class="background" style="position:absolute;top:0;left:0;z-index:1;"><img src="' + settings.background + '"/></div><div class="foreground" style="position:absolute;top:0;left:0;z-index:2;"></div>');
 
         $('.background', $(this)).css({
           'position' : 'relative'
@@ -43,6 +43,7 @@
     },
 
     showElement: function($el, direction) {
+      var $buf= $('.buffer', this);     // Buffer for used elements
       var $fg = $('.foreground', this); // Foreground element
       var $bg = $('.background', this); // Background image
       var ox  = $fg.position().left;    // Current foreground offset relative to container
@@ -63,14 +64,8 @@
         btx = $bg.position().left - (settings.factor * settings.width);
       }
 
-      console.debug('ox = ' + ox);
-      console.debug('px = ' + px);
-      console.debug('tween to' + tx);
-
       $el.addClass('parallax-next');
       $el.show();
-
-
 
       $fg.append($el.css({
         'top'       : 0,
@@ -79,7 +74,7 @@
       })).animate({
         'left'      : tx
       }, t, settings.easing, function() {
-        $('.parallax-current', $fg).removeClass('parallax-current').hide();
+        $('.parallax-current', $fg).removeClass('parallax-current').appendTo($buf);
         $el.removeClass('parallax-next').addClass('parallax-current').show();
       });
 
