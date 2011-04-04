@@ -52,39 +52,78 @@
       var btx = 0;                      // x pos to animate the bg container to
       var t   = settings.time;          // animation time
    
-      // in from the right...
-      if (direction == 'right') {
-        px = -ox - settings.width;
-        tx = ox + settings.width;
-        btx = $bg.position().left + (settings.factor * settings.width);
-      } else {
-      // in from the left...
-        px = settings.width - ox;
-        tx = ox - settings.width;
-        btx = $bg.position().left - (settings.factor * settings.width);
-      }
-
       $el.addClass('parallax-next');
       $el.show();
 
-      $fg.append($el.css({
-        'top'       : 0,
-        'left'      : px + 'px',
-        'position'  : 'absolute'
-      })).animate({
-        'left'      : tx
-      }, t, settings.easing, function() {
+      var onComplete = function() {
         $('.parallax-current', $fg).removeClass('parallax-current').appendTo($buf);
         $el.removeClass('parallax-next').addClass('parallax-current').show();
-      });
+      };
 
-      $bg.animate({
-        'left' : btx
-      }, t, settings.easing);
+      if (direction == 'none') {
+        $fg.append($el.css({
+          'top'       : 0,
+          'left'      : 0,
+          'position'  : 'absolute'
+        })).css({
+          'top'       : 0,
+          'left'      : 0
+        });
+        onComplete();
+      } else {
+
+        // in from the right...
+        if (direction == 'right') {
+          px = -ox - settings.width;
+          tx = ox + settings.width;
+          btx = $bg.position().left + (settings.factor * settings.width);
+        } else {
+        // in from the left...
+          px = settings.width - ox;
+          tx = ox - settings.width;
+          btx = $bg.position().left - (settings.factor * settings.width);
+        }
+
+        $fg.append($el.css({
+          'top'       : 0,
+          'left'      : px + 'px',
+          'position'  : 'absolute'
+        })).animate({
+          'left'      : tx
+        }, t, settings.easing, onComplete);
+
+        $bg.animate({
+          'left' : btx
+        }, t, settings.easing);
+      }     
 
       return this;
+    },
+
+    reset: function() {
+      var $buf= $('.buffer', this); 
+      var $fg = $('.foreground', this); // Foreground element
+      var $bg = $('.background', this); // Background image
+      
+      $bg.css({
+        'top':0,
+        'left':0
+      });
+
+      $fg.css({
+        'top':0,
+        'left':0
+      });
+
+      $('.parallax-current', $fg).removeClass('parallax-current').appendTo($buf);
+    },
+
+    setBackground: function(src) {
+      $('.background img', this).attr('src', src);
     }
   };
+
+  
   
   $.fn.parallax = function(method) {
     // Method calling logic

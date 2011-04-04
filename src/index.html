@@ -21,6 +21,16 @@
         $('#parallax').parallax('showElement', $(tokens[0]), tokens[1]);
         e.preventDefault();
       });
+
+      $('a.reset').click(function(e){
+        $('#parallax').parallax('reset');
+        e.preventDefault();
+      });
+
+      $('a.setBackground').click(function(e){
+        $('#parallax').parallax('setBackground', $(this).attr("rel"));
+        e.preventDefault();
+      });
     });
 
   </script>
@@ -68,6 +78,13 @@
   <a href="#" class="showElement" rel="#page2:right">Scroll to page 2 right</div><br/>
   <a href="#" class="showElement" rel="#page3:right">Scroll to page 3 right</div><br/>
   <a href="#" class="showElement" rel="#page4:right">Scroll to page 4 right</div><br/>
+  <a href="#" class="showElement" rel="#page1:none">Scroll to page 1 none</div><br/>
+  <a href="#" class="showElement" rel="#page2:none">Scroll to page 2 none</div><br/>
+  <a href="#" class="showElement" rel="#page3:none">Scroll to page 3 none</div><br/>
+  <a href="#" class="showElement" rel="#page4:none">Scroll to page 4 none</div><br/>
+  <a href="#" class="setBackground" rel="img/bg.jpg">Set background 1</div><br/>
+  <a href="#" class="setBackground" rel="img/bg-alt.jpg">Set background 2</div><br/>
+  <a href="#" class="reset">reset</div><br/>
 
 </body>
 </html>
